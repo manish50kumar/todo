@@ -3,7 +3,9 @@ import express from 'express';
 import {
     AddTask,
     UpdateTask,
-    GetAllTask
+    GetAllTask,
+    DeleteTask,
+    CompleteTask
 } from '../controllers/task.controller.js';
 
 const router = express.Router();
@@ -13,6 +15,8 @@ const router = express.Router();
 router.post('/add-task', AddTask);
 router.post('/update-task/:id', UpdateTask);
 router.get('/get-all-task', GetAllTask);
+router.delete('/delete-task/:id', DeleteTask);
+router.post('/complete-task', CompleteTask);
 
 
 

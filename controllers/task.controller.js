@@ -50,12 +50,12 @@ async function UpdateTask(req, res) {
 
         if (updatedTask > 0) {
             const updateTaskfinal = await Task.findOne({ id: id });
-            console.log('Task updated successfully!',);
-            console.log('Name : ', updateTaskfinal.name);
-            console.log('Task : ', updateTaskfinal.task);
+            // console.log('Task updated successfully!',);
+            // console.log('Name : ', updateTaskfinal.name);
+            // console.log('Task : ', updateTaskfinal.task);
             res.status(200).json({ message: "Task updated successfully", updateTaskfinal })
         } else {
-            console.log('No task found with id 2');
+            console.log('No task found with id ',id);
         }
 
         
@@ -80,10 +80,76 @@ async function GetAllTask(req, res) {
     }
 }
 
+// delete task
+async function DeleteTask(req, res) {
+    try {
+        const { id } = req.params; // Assuming the ID is passed in request parameters
+
+        if (!id) {
+            console.log("Id is required in params");
+            return res.status(400).json({ message: "Missing required parameter: id" });
+        }
+
+        const deletedCount = await Task.destroy({
+            where: {
+                id: id
+            }
+        });
+
+        if (deletedCount > 0) {
+            console.log('Task deleted successfully!');
+            res.status(200).json({ message: "Task deleted successfully" });
+        } else {
+            console.log('No task found with id:', id);
+            res.status(404).json({ message: "No task found with the provided id" });
+        }
+    } catch (error) {
+        console.error("Error in delete Task : ", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+
+// task complete 
+async function CompleteTask(req, res) {
+    try {
+        const { id } = req.body; // Destructure id from request body
+        console.log("id : ", id);
+
+        if (!id) {
+            console.log("Id is required in body");
+            return res.status(400).json({ message: "Missing required parameter: id" });
+        }
+
+        const updatedTask = await Task.update({
+            status: true // Mark task as completed
+        }, {
+            where: {
+                id: id
+            }
+        });
+
+        if (updatedTask > 0) {
+            
+            const updatedTaskFinal = await Task.findOne({ id: id }); 
+            console.log('Task completed successfully!', id,updatedTaskFinal);
+            res.status(200).json({ message: "Task completed successfully", updatedTaskFinal });
+        } else {
+            console.log('No task found with id:', id);
+            res.status(404).json({ message: "No task found with the provided id" });
+        }
+    } catch (error) {
+        console.error("Error in complete Task : ", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 
 
 export {
     AddTask,
     UpdateTask,
-    GetAllTask
+    GetAllTask,
+    DeleteTask,
+    CompleteTask
 };
