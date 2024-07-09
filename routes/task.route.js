@@ -1,12 +1,16 @@
 import express from 'express';
 // Import User model
-import { AddTask } from '../controllers/task.controller.js';
+import {
+    AddTask,
+    UpdateTask
+} from '../controllers/task.controller.js';
 
 const router = express.Router();
 
 // CRUD routes for User model
 
 router.post('/add-task', AddTask);
+router.post('/update-task/:id', AddTask);
 
 
 
